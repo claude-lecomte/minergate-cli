@@ -1,0 +1,11 @@
+
+project(${BCRYPT_LIB})
+
+file(GLOB SOURCES src/*.c)
+file(GLOB HEADERS src/*.h)
+
+ADD_DEFINITIONS(-DBCRYPT_EXPORT)
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+
+add_library(${PROJECT_NAME} ${SOURCES} ${HEADERS})

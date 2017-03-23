@@ -1,0 +1,3 @@
+kbuildsycoca4 --noincremental
+kbuildsycoca5 --noincremental
+gtk-update-icon-cache

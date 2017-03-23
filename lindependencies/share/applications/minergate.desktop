@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=MinerGate
+Comment=Bytecoin miner
+Exec=minergate
+Terminal=false
+Type=Application
+Icon=minergate
+MimeType=x-scheme-handler/minergate;
+Categories=Office;Finance;

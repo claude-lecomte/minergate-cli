@@ -1,0 +1,8 @@
+BFGMiner Mac OS X installation for minergate.
+
+  You may download prebuild version of bfgminer-3.10.0 for Mac OS from unofficial site http://fabulouspanda.co.uk/commandline/bfgminer/
+or compile it from official sources (https://github.com/luke-jr/bfgminer).
+  For compilation from source code you must enable opencl and scrypt algorythm support (configure options: --enable-opencl --enable-scrypt).
+  After bfgminer installation set environment variable MG_BFGMINER_PATH to bfgminer binary path. You can use "launchctl" command.
+For example "launchctl setenv MG_BFGMINER_PATH /Users/john/Downloads/bfgminer-3.10-mac/bfgminer/bin/bfgminer"
+  Start minergate application.

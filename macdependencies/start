@@ -1,0 +1,11 @@
+#!/bin/bash
+
+MG_BUNDLE="`echo "$0" | sed -e 's/\/Contents\/MacOS\/MinerGate//'`"
+echo $MG_BUNDLE
+MG_RESOURCES="$MG_BUNDLE/Contents/Resources"
+MG_BIN_DIR="$MG_RESOURCES/bin"
+MG_LIB_DIR="$MG_RESOURCES/lib"
+
+export DYLD_FRAMEWORK_PATH="$MG_RESOURCES/Frameworks"
+export QT_PLUGIN_PATH=$MG_LIB_DIR
+exec $MG_BIN_DIR/minergate $1

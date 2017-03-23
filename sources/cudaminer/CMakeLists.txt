@@ -1,0 +1,51 @@
+find_package(Qt5Core REQUIRED)
+set(CMAKE_AUTOMOC ON)
+
+find_package(CUDA REQUIRED)
+
+if (ARCH_64bit)
+  set (Boost_USE_STATIC_LIBS ON)
+  set (Boost_MULTITHREADED ON)
+  set (Boost_USE_MULTITHREADED ON)
+  find_package(Boost 1.55.0 REQUIRED COMPONENTS system thread random chrono date_time regex)
+  INCLUDE_DIRECTORIES(${ETH_SRC_DIR})
+endif()
+
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
+INCLUDE_DIRECTORIES(${CRYPTO_SRC_DIR} ${CN_SRC_DIR}/src)
+INCLUDE_DIRECTORIES(${MINER_ABSTRACT_SRC_DIR})
+INCLUDE_DIRECTORIES(${MINER_IMPL_SRC_DIR})
+INCLUDE_DIRECTORIES(${UTILS_SRC_DIR})
+INCLUDE_DIRECTORIES(${CUDAMINER_IMPL_SRC_DIR})
+if (ARCH_64bit)
+  INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
+endif()
+
+file(GLOB SOURCES src/*.cpp)
+file(GLOB HEADERS src/cudaminer/*.h)
+
+if (NOT ARCH_64bit)
+  list(REMOVE_ITEM SOURCES ${CUDAMINER_IMPL_SRC_DIR}/ethcudaminer.cpp)
+  list(REMOVE_ITEM HEADERS ${CUDAMINER_IMPL_SRC_DIR}/cudaminer/ethcudaminer.h)
+endif()
+
+cuda_add_library(${CUDA_MINER_LIB} ${SOURCES} ${HEADERS})
+target_link_libraries(${CUDA_MINER_LIB} ${MINER_ABSTRACT_LIB} ${CU_CRYPTONOTE_LIB})
+
+if (ARCH_64bit)
+  target_link_libraries(${CUDA_MINER_LIB} ${CU_ETHEREUM_LIB} ${ETH_ETHCORE_LIB} ${ETH_ETHASH_LIB})
+  target_link_libraries(${CUDA_MINER_LIB} ${Boost_THREAD_LIBRARIES})
+  target_link_libraries(${CUDA_MINER_LIB} ${Boost_SYSTEM_LIBRARIES})
+  target_link_libraries(${CUDA_MINER_LIB} ${Boost_RANDOM_LIBRARIES})
+  target_link_libraries(${CUDA_MINER_LIB} ${Boost_CHRONO_LIBRARIES})
+  target_link_libraries(${CUDA_MINER_LIB} ${Boost_DATE_TIME_LIBRARIES})
+  target_link_libraries(${CUDA_MINER_LIB} ${Boost_REGEX_LIBRARIES})
+endif()
+
+add_subdirectory(src/cu_cryptonote)
+if (ARCH_64bit)
+  add_subdirectory(src/cu_ethereum)
+endif()
+
+qt5_use_modules(${CUDA_MINER_LIB} Core)
